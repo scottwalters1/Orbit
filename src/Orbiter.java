@@ -54,18 +54,24 @@ public class Orbiter {
       return Matrix.identity(3);
     }
 
-    Orbiter root = this.getParent();
-    while (root.getParent() != null) {
-      root = root.getParent();
-    }
+    Orbiter parent = this.getParent();
+//    return parent.getMatrix().dot(Matrix.rotationH2D(orbitAngle).dot(Matrix.translationH2D(orbitRadius, 0)));
 
-    double[][] d = {{0, 0, 1}};
-    //Matrix result = new Matrix(d);
-    Matrix result = root.getMatrix();
+     Matrix p = parent.getMatrix();
+     Matrix rotateM = Matrix.rotationH2D(orbitAngle);
+     Matrix translateM = Matrix.translationH2D(orbitRadius, 0);
 
-    // return result dot rotation dot translation
-//    return recurse(root, result);
-    return result.dot(Matrix.rotationH2D(root.getOrbitAngle()).dot(Matrix.translationH2D(root.getOrbitRadius(), 0)));
+//     Matrix t = Matrix.translationH2D(p.entry(0, 2), p.entry(1, 2));
+    Matrix t = Matrix.rotationH2D(getOrbitAngle()).dot(Matrix.translationH2D(getOrbitRadius(), 0));
+
+//     return t.dot(rotateM).dot(translateM);
+    return p.dot(t);
+
+
+
+//    translate(entry 0 2 and entry 1 2 of parent) multiply that by rotate and translate
+
+
 
     // TODO
     // If this is the root node, then return the 3x3 identity matrix
@@ -74,14 +80,21 @@ public class Orbiter {
     // do this). Make sure you've coded the Matrix class first.
   }
 
-  private Matrix recurse(Orbiter o, Matrix result) throws UndefinedMatrixOpException {
-
-    while (o.getChildren() != null) {
-      for (Orbiter next : o.getChildren()) {
-        result = result.dot(Matrix.rotationH2D(o.getOrbitAngle()).dot(Matrix.translationH2D(o.getOrbitRadius(), 0)));
-        result = recurse(next, result);
-      }
-    }
-    return result;
+  public static void main(String[] args) throws UndefinedMatrixOpException {
+    Orbiter root = new Orbiter(null, 10, 5, 10, Type.CIRCLE, Color.RED);
+    Orbiter a = new Orbiter(root, 5, 10, 5, Type.CIRCLE, Color.RED);
+    Orbiter b = new Orbiter(a, 10, 5, 10, Type.CIRCLE, Color.GREEN);
+    System.out.println(b.getMatrix().toString());
   }
+
+//  private Matrix recurse(Orbiter o, Matrix result) throws UndefinedMatrixOpException {
+//
+//    while (o.getChildren() != null) {
+//      for (Orbiter next : o.getChildren()) {
+//        result = result.dot(Matrix.rotationH2D(o.getOrbitAngle()).dot(Matrix.translationH2D(o.getOrbitRadius(), 0)));
+//        result = recurse(next, result);
+//      }
+//    }
+//    return result;
+//  }
 }

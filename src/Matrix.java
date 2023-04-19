@@ -21,12 +21,12 @@ public class Matrix {
   /**
    * @return The number of columns in the matrix. X
    */
-  public int nCols() { return m; }
+  public int nCols() { return n; }
 
   /**
    * @return the number of rows. X
    */
-  public int nRows() { return n; }
+  public int nRows() { return m; }
 
   /**
    * @param i
@@ -41,7 +41,7 @@ public class Matrix {
    * Computes the dot product of this matrix with the parameter that. (Return value is this . that) TENTATIVE X
    * Recall that the dot product is the typical matrix multiplication.
    * @param that The matrix to apply this matrix to.
-   * @throws BadDimensionException If this.nCols() != that.nRows() because the dot product is not defined
+   * @throws UndefinedMatrixOpException If this.nCols() != that.nRows() because the dot product is not defined
    * @return The dot product of this matrix with that.
    */
   public Matrix dot(Matrix that) throws UndefinedMatrixOpException {
@@ -49,12 +49,12 @@ public class Matrix {
       throw new UndefinedMatrixOpException("Bad Dimension", this, that);
     }
 
-    int RnCols = this.nCols();
-    int RnRows = that.nRows();
-    double[][] result = new double[RnCols][RnRows];
-    for (int i = 0; i < RnCols; i++) {
-      for (int j = 0; j < RnRows; j++) {
-        for (int k = 0; k < that.nCols(); k++) {
+    int RnCols = that.nCols();
+    int RnRows = this.nRows();
+    double[][] result = new double[RnRows][RnCols];
+    for (int i = 0; i < RnRows; i++) {
+      for (int j = 0; j < RnCols; j++) {
+        for (int k = 0; k < that.nRows(); k++) {
           result[i][j] += this.entry(i, k) * that.entry(k, j);
         }
       }
@@ -66,7 +66,7 @@ public class Matrix {
   /**
    * Add this matrix to that and returns the result. (Return value is this + that) X
    * @param that the matrix to add this matrix to.
-   * @throws BadDimensionException If the dimension of the two matrices are not identical.
+   * @throws UndefinedMatrixOpException If the dimension of the two matrices are not identical.
    * @return The sum of the this and that.
    */
   public Matrix plus(Matrix that) throws UndefinedMatrixOpException {
@@ -189,7 +189,9 @@ public class Matrix {
 //    System.out.println(translationH2D(5, 10).toString());
 //    System.out.println(vectorH2D(5, 10).toString());
 
-    System.out.println(identity(10, 5));
+//    System.out.println(identity(10, 5));]
+
+    System.out.println(translationH2D(10, 10));
 
 
   }

@@ -70,31 +70,49 @@ void draw() {
 }
 
 void updateOrbiters(double timeDelta) {
-  
-  sun.updateRotation(timeDelta); //<>//
-  for (Orbiter next : sun.getChildren()) {
-    next.updateRotation(timeDelta);
-  }
+  recurseUpdate(sun, timeDelta);
   // TODO
   // This code should traverse the orbiters (in BFS or DFS, but I used BFS) 
   // order using a stack or a queue (your choice),  and call updateRotation 
   // on each one using the timeDelta parameter. 
   //
   // Recall that Java has a Queue<T> data type and a Stack<T> interface
-  
+}
+
+void recurseUpdate(Orbiter o, double timeDelta) {
+  o.updateRotation(timeDelta);
+  System.out.println("1");
+  if (o.getChildren() == null) {
+    return;
+  }
+  for (Orbiter next : o.getChildren()) {
+    next.updateRotation(timeDelta);
+    System.out.println("2");
+    recurseUpdate(next, timeDelta);
+  }
+   return;
 }
 
 void drawOrbiters() {
-  
-  drawOrbiter(sun); //<>//
-  for (Orbiter next : sun.getChildren()) {
-    drawOrbiter(next);
-  }
-  
+  //drawOrbiter(sun);
+  recurseDraw(sun);
   // TODO
   // This code should traverse the orbiters (in BFS or DFS order, i used BFS)
-  // and call drawOrbiter on each orbiter. 
-  
+  // and call drawOrbiter on each orbiter.  
+}
+
+void recurseDraw(Orbiter o) {
+  drawOrbiter(o); //<>//
+  System.out.println("a");
+  if (o.getChildren() == null ){
+    return;
+  }
+  for (Orbiter next : o.getChildren()) {
+    drawOrbiter(next);
+    System.out.println("b");
+    recurseDraw(next);   
+  }
+   return;
 }
 
 // The code for drawing an orbiter. This is called from your drawOrbiters() method
@@ -131,5 +149,7 @@ void drawOrbiter(Orbiter orbiter) {
       }
     }
   } catch (UndefinedMatrixOpException umoe) {
+     System.out.println(umoe);
+    
   }
 }
